@@ -36,9 +36,9 @@ module.exports = async (message, options) => {
 
     // check if all the variables given are valid
     if (!message) throw new Error("[MISSING_PARAMETER] The message or interaction parameter was not provided, was null or undefined.")
-    
-    // check if message and commandInteraction aren't something made up
-    if (!(message instanceof Discord.Message) && !(message instanceof Discord.CommandInteraction)) throw new Error("[INVALID_PARAMATER] The message or interaction parameter provided is not valid.")
+
+    // check if message is a valid message or a command 
+    if ((typeof message !== "object" && message.constructor.name !== "Message") && (message.type !== Discord.InteractionType.ApplicationCommand)) throw new Error("[INVALID_PARAMATER] The message or interaction parameter provided is not valid.")
 
     // set all the options
     if (!options) options = {} // if options were not provided, make an empty object
@@ -60,9 +60,9 @@ module.exports = async (message, options) => {
      
     // set what type the message is
     let commandType
-    if (message instanceof Discord.Message) {
+    if (typeof message === "object" && message.constructor.name === "Message") {
         commandType = "message"
-    } else if (message instanceof Discord.CommandInteraction) {
+    } else if (message.type === Discord.InteractionType.ApplicationCommand) {
         commandType = "interaction"
     }
 
